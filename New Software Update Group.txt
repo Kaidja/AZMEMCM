@@ -1,0 +1,8 @@
+//New Software Update Group Group
+Event
+| where EventID == 30219 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SoftwareUpdateGroupID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend SoftwareUpdateGroupName = extractjson("$['DataItem']['EventData']['Data'][3]", MyData) 
+| project Administrator, SoftwareUpdateGroupID, SoftwareUpdateGroupName, TimeGenerated
