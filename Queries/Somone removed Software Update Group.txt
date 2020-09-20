@@ -1,0 +1,7 @@
+//Somone removed Software Update Group
+Event
+| where EventID == 30221 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SoftwareUpdateGroupID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| project Administrator, SoftwareUpdateGroupID, TimeGenerated
