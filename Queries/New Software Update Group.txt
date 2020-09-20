@@ -1,4 +1,4 @@
-//New Software Update Group Group
+//New Software Update Group
 Event
 | where EventID == 30219 and EventLog == "ConfigurationManager"
 | extend MyData = tostring(parse_xml(EventData))
