@@ -1,0 +1,7 @@
+//New Security Role
+Event
+| where EventID == 31200 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SecurityRoleName = extractjson("$['DataItem']['EventData']['Data'][2]", MyData)
+| project Administrator, SecurityRoleName, TimeGenerated

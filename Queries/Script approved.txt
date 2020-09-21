@@ -1,0 +1,9 @@
+//Script approved in Configuration Manager
+Event
+| where EventID == 52501 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend ScriptGUID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend ScriptContent = extractjson("$['DataItem']['EventData']['Data'][4]", MyData)
+| extend Name = extractjson("$['DataItem']['EventData']['Data'][5]", MyData)
+| project Administrator, ScriptGUID, ScriptContent, Name, TimeGenerated

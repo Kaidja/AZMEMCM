@@ -1,0 +1,7 @@
+//Somebody changed the Client Settings
+Event
+| where EventID == 30043 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend ClientSettingName = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| project Administrator, ClientSettingName, TimeGenerated

@@ -1,0 +1,10 @@
+//Somebody added a new user  / group - EventID 31240
+Event
+| where EventID == 31240 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend UserOrGroup = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend Roles = extractjson("$['DataItem']['EventData']['Data'][3]", MyData)
+| extend Scopes = extractjson("$['DataItem']['EventData']['Data'][4]", MyData)
+| extend Collections = extractjson("$['DataItem']['EventData']['Data'][5]", MyData)
+| project Administrator, UserOrGroup, Roles, Scopes, Collections, TimeGenerated

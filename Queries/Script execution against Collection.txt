@@ -1,0 +1,11 @@
+//Script execution against Collection
+Event
+| where EventID == 40805 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend ScriptGUID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend ScriptContent = extractjson("$['DataItem']['EventData']['Data'][4]", MyData)
+| extend Name = extractjson("$['DataItem']['EventData']['Data'][5]", MyData)
+| extend Collection = extractjson("$['DataItem']['EventData']['Data'][6]", MyData)
+| extend CollectionID = extractjson("$['DataItem']['EventData']['Data'][7]", MyData)
+| project Administrator, ScriptGUID, ScriptContent, Name, Collection, CollectionID, TimeGenerated

@@ -1,0 +1,8 @@
+//Change in Task Sequence
+Event
+| where EventID == 30001 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend TaskSequenceID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend TaskSequence = extractjson("$['DataItem']['EventData']['Data'][3]", MyData) 
+| project Administrator, TaskSequenceID, TaskSequence, TimeGenerated

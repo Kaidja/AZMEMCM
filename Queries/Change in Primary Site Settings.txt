@@ -1,0 +1,7 @@
+//Change in Primary Site Settings
+Event
+| where EventID == 30031 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SiteName = extractjson("$['DataItem']['EventData']['Data'][2]", MyData)
+| project Administrator, SiteName, TimeGenerated

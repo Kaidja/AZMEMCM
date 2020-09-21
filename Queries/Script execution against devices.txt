@@ -1,0 +1,10 @@
+//Script execution against devices
+Event
+| where EventID == 40806 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend ScriptGUID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend ScriptContent = extractjson("$['DataItem']['EventData']['Data'][4]", MyData)
+| extend Name = extractjson("$['DataItem']['EventData']['Data'][5]", MyData)
+| extend DeviceCount = extractjson("$['DataItem']['EventData']['Data'][6]", MyData)
+| project Administrator, ScriptGUID, ScriptContent, Name, DeviceCount, TimeGenerated

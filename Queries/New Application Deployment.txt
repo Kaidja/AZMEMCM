@@ -1,0 +1,8 @@
+//New Application deployment - EventID 30226
+Event
+| where EventID == 30226 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend Application = extractjson("$['DataItem']['EventData']['Data'][2]", MyData)
+| extend Collection = extractjson("$['DataItem']['EventData']['Data'][3]", MyData) 
+| project Administrator, Application, Collection, TimeGenerated

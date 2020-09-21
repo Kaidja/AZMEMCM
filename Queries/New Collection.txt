@@ -1,0 +1,8 @@
+//New Collection in Configuration Manager
+Event
+| where EventID == 30015 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend CollectionName = extractjson("$['DataItem']['EventData']['Data'][3]", MyData) 
+| extend CollectionID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| project Administrator, CollectionName, CollectionID, TimeGenerated

@@ -1,0 +1,9 @@
+Event
+| where EventID == 30077 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SourceComputer = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend TargetComputer = extractjson("$['DataItem']['EventData']['Data'][3]", MyData)
+| extend ProcessID = extractjson("$['DataItem']['EventData']['Data'][4]", MyData) 
+| extend ThreadID = extractjson("$['DataItem']['EventData']['Data'][5]", MyData) 
+| project Administrator, SourceComputer, TargetComputer, ProcessID, ThreadID, TimeGenerated
