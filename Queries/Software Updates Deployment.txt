@@ -1,0 +1,14 @@
+//Software Updates Deployments
+Event
+| where EventID == 30196 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend SoftwareUpdateGroupID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend SoftwareUpdateGroupName = extractjson("$['DataItem']['EventData']['Data'][3]", MyData)
+| extend DeploymentName = extractjson("$['DataItem']['EventData']['Data'][4]", MyData) 
+| extend DeploymentStartTime = extractjson("$['DataItem']['EventData']['Data'][5]", MyData) 
+| extend DeploymentDeadLine = extractjson("$['DataItem']['EventData']['Data'][6]", MyData) 
+| extend CollectionID = extractjson("$['DataItem']['EventData']['Data'][7]", MyData) 
+| extend Featuretype = extractjson("$['DataItem']['EventData']['Data'][8]", MyData) 
+| where Featuretype == "Software Update"
+| project Administrator, SoftwareUpdateGroupID, SoftwareUpdateGroupName,DeploymentName,DeploymentStartTime,DeploymentDeadLine,CollectionID, TimeGenerated
