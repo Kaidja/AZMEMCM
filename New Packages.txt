@@ -1,0 +1,12 @@
+//New package creation - generic ID for different package types
+// Package IDs
+// 0 - classic software package, 5 - Software Update Deployment Package, 4 - Task Sequence
+Event
+| where EventID == 30000 and EventLog == "ConfigurationManager"
+| extend MyData = tostring(parse_xml(EventData))
+| extend Administrator = extractjson("$['DataItem']['EventData']['Data'][1]", MyData)
+| extend PackageID = extractjson("$['DataItem']['EventData']['Data'][2]", MyData) 
+| extend ContentType = extractjson("$['DataItem']['EventData']['Data'][3]", MyData)
+| extend ContentTypeConversion = case(ContentType == 0, "Package",ContentType == 5, "Software Update Deployment Package",ContentType == 4, "Task Sequence","unknown") 
+| extend Name = extractjson("$['DataItem']['EventData']['Data'][4]", MyData)
+| project Administrator, PackageID, ContentType, ContentTypeConversion, Name, TimeGenerated
